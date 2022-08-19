@@ -14,21 +14,24 @@ class App(customtkinter.CTk):
         x = int(self.winfo_screenwidth() // 2.5)
         y = int(self.winfo_screenheight() * 0.2)
         x, y = str(x), str(y)
-        self.geometry(f'450x580+{x}+{y}')
+        self.geometry(f'450x600+{x}+{y}')
         self.title('MasterMind')
         self.resizable(0, 0)
         
         self.accent_color1 = '#212325'
         self.accent_color2 = '#ededed'
-        self.accent_color3 = '#3b65ad'
-        self.accent_color4 = '#608bd5'
-        self.accent_color5 = '#f878b6'
-        self.accent_color6 = '#d6478d'
-        self.accent_color7 = '#000000'
-        self.accent_color8 = '#343638'
-        self.accent_color9 = '#ffffff'
+        self.accent_color3 = '#f878b6'
+        self.accent_color4 = '#d6478d'
+        self.accent_color5 = '#4d5154'
+        self.accent_color6 = '#ffffff'
+        self.basic_color1 = 'gold'
+        self.basic_color2 = 'lime'
+        self.basic_color3 = 'blue'
+        self.basic_color4 = 'red'
+        self.basic_color5 = 'magenta'
         self.accent_font_1 = ('TkMenuFont',18)
         self.accent_font_2 = ('TkMenuFont',8)
+        self.accent_font_3 = ('TkMenuFont',10)
         
         self.random_colors_list = []
         self.input_colors_list = []
@@ -49,81 +52,110 @@ class App(customtkinter.CTk):
         self.header_widget.place(x = -10, y = -30)
         self.header_widget.configure(
             bg_color = self.accent_color2,
-            fg_color = self.accent_color9,
-            text_color = self.accent_color8,
-            width = 380,
+            fg_color = self.accent_color6,
+            text_color = self.accent_color5,
+            width = 360,
             height = 80
         )
         
         self.rules_btn = customtkinter.CTkButton(self, corner_radius = 15, text = '\n\nRules', text_font = self.accent_font_2)
-        self.rules_btn.place(x = 380, y = -30)
+        self.rules_btn.place(x = 360, y = -30)
         self.rules_btn.configure(
             bg_color = self.accent_color2,
-            fg_color = self.accent_color8,
+            fg_color = self.accent_color5,
             text_color = self.accent_color2,
             hover_color = self.accent_color1,
-            width = 50,
+            width = 110,
             height = 80
         )
-        self.hover(self.rules_btn, self.accent_color8, self.accent_color2)
+        self.hover(self.rules_btn, self.accent_color5, self.accent_color2)
+        
+        self.random_colors_widget = customtkinter.CTkLabel(self, corner_radius = 15, text = '', text_font = self.accent_font_1)
+        self.random_colors_widget.place(x = 100, y = 80)
+        self.random_colors_widget.configure(
+            bg_color = self.accent_color2,
+            fg_color = self.accent_color6,
+            text_color = self.accent_color5,
+            width = 250,
+            height = 50
+        )
+        
+        self.timer_widget = customtkinter.CTkLabel(self, corner_radius = 15, text = '00:23', text_font = self.accent_font_3)
+        self.timer_widget.place(x = 360, y = 80)
+        self.timer_widget.configure(
+            bg_color = self.accent_color2,
+            fg_color = self.accent_color6,
+            text_color = self.accent_color5,
+            width = 100,
+            height = 50
+        )
         
         self.base_color_widget = customtkinter.CTkLabel(self, corner_radius = 15, text = '', text_font = self.accent_font_1)
-        self.base_color_widget.place(x = 40, y = 80)
+        self.base_color_widget.place(x = 40, y = 140)
         self.base_color_widget.configure(
             bg_color = self.accent_color2,
-            fg_color = self.accent_color9,
-            text_color = self.accent_color8,
+            fg_color = self.accent_color6,
+            text_color = self.accent_color5,
             width = 50,
             height = 250
         )
         
         self.playground_widget = customtkinter.CTkLabel(self, corner_radius = 15, text = '', text_font = self.accent_font_1)
-        self.playground_widget.place(x = 100, y = 80)
+        self.playground_widget.place(x = 100, y = 140)
         self.playground_widget.configure(
             bg_color = self.accent_color2,
-            fg_color = self.accent_color9,
-            text_color = self.accent_color8,
+            fg_color = self.accent_color6,
+            text_color = self.accent_color5,
             width = 250,
             height = 430
         )
         
         self.result_widget = customtkinter.CTkLabel(self, corner_radius = 15, text = '', text_font = self.accent_font_1)
-        self.result_widget.place(x = 360, y = 80)
+        self.result_widget.place(x = 360, y = 140)
         self.result_widget.configure(
             bg_color = self.accent_color2,
-            fg_color = self.accent_color9,
-            text_color = self.accent_color8,
+            fg_color = self.accent_color6,
+            text_color = self.accent_color5,
             width = 50,
             height = 430
         )
         
-        self.play_btn = customtkinter.CTkButton(self, corner_radius = 15, text = '▷', text_font = self.accent_font_2)
-        self.play_btn.place(x = 40, y = 340)
-        self.reset_btn = customtkinter.CTkButton(self, corner_radius = 15, text = '↻', text_font = self.accent_font_2)
-        self.reset_btn.place(x = 40, y = 400)
-        self.quit_btn = customtkinter.CTkButton(self, corner_radius = 15, text = 'x', text_font = self.accent_font_2)
-        self.quit_btn.place(x = 40, y = 460)
+        self.random_btn = customtkinter.CTkButton(self, corner_radius = 15, text = 'Random', text_font = self.accent_font_2)
+        self.random_btn.place(x = -15, y = 80)
+        self.reset_btn = customtkinter.CTkButton(self, corner_radius = 15, text = 'Reset', text_font = self.accent_font_2)
+        self.reset_btn.place(x = -15, y = 400)
+        self.stats_btn = customtkinter.CTkButton(self, corner_radius = 15, text = 'Stats', text_font = self.accent_font_2)
+        self.stats_btn.place(x = -15, y = 460)
+        self.quit_btn = customtkinter.CTkButton(self, corner_radius = 15, text = 'Quit', text_font = self.accent_font_2)
+        self.quit_btn.place(x = -15, y = 520)
         self.quit_btn.configure(
             bg_color = self.accent_color2,
-            fg_color = self.accent_color5,
+            fg_color = self.accent_color3,
             text_color = self.accent_color2,
-            hover_color = self.accent_color6,
-            width = 50,
+            hover_color = self.accent_color4,
+            width = 105,
             height = 50
         )
-        self.hover(self.quit_btn, self.accent_color8, self.accent_color2)
+        self.hover(self.quit_btn, self.accent_color3, self.accent_color2)
         
-        for i in (self.play_btn,self.reset_btn):
+        for i in (self.random_btn,self.reset_btn,self.stats_btn):
             i.configure(
                 bg_color = self.accent_color2,
-                fg_color = self.accent_color9,
-                text_color = self.accent_color8,
-                hover_color = self.accent_color8,
-                width = 50,
+                fg_color = self.accent_color5,
+                text_color = self.accent_color2,
+                hover_color = self.accent_color1,
+                width = 105,
                 height = 50
             )
-            self.hover(i, self.accent_color2, self.accent_color8)
-        
+            self.hover(i, self.accent_color5, self.accent_color2)
+       
+       
+       
+       
+       
+       
+       
+       
         
     def show_colors(self):
         self.colors_list = ['gold','lime','blue','magenta']
