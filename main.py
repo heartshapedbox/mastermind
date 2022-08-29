@@ -1,4 +1,6 @@
 from tkinter import *
+from threading import Timer
+from time import sleep
 import customtkinter
 import random
 import pyglet
@@ -52,25 +54,25 @@ class App(customtkinter.CTk):
        
         
     def show_game(self):
-        self.header_widget = customtkinter.CTkLabel(self, corner_radius = 8, text = 'Mastermind', text_font = self.accent_font_4)
-        self.header_widget.place(x = -10, y = -10)
+        self.header_widget = customtkinter.CTkLabel(self, corner_radius = 8, text = '      Mastermind', text_font = self.accent_font_4)
+        self.header_widget.place(x = 10, y = 10)
         self.header_widget.configure(
             bg_color = self.accent_color2,
             fg_color = self.accent_color6,
             text_color = self.accent_color4,
-            width = 360,
+            width = 340,
             height = 60
         )
         
-        self.rules_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '\n\nRules', text_font = self.accent_font_2)
-        self.rules_btn.place(x = 360, y = -30)
+        self.rules_btn = customtkinter.CTkButton(self, corner_radius = 8, text = 'Rules', text_font = self.accent_font_2)
+        self.rules_btn.place(x = 360, y = 10)
         self.rules_btn.configure(
             bg_color = self.accent_color2,
             fg_color = self.accent_color5,
             text_color = self.accent_color2,
             hover_color = self.accent_color1,
             width = 80,
-            height = 80
+            height = 60
         )
         self.hover(self.rules_btn, self.accent_color5, self.accent_color2)
         
@@ -84,7 +86,7 @@ class App(customtkinter.CTk):
             height = 50
         )
         
-        self.timer_widget = customtkinter.CTkLabel(self, corner_radius = 8, text = '00:23', text_font = self.accent_font_3)
+        self.timer_widget = customtkinter.CTkLabel(self, corner_radius = 8, text = '00:00', text_font = self.accent_font_3)
         self.timer_widget.place(x = 10, y = 80)
         self.timer_widget.configure(
             bg_color = self.accent_color2,
@@ -137,7 +139,7 @@ class App(customtkinter.CTk):
             )
             self.hover(i, self.accent_color8, self.accent_color2)
         
-        self.random_btn = customtkinter.CTkButton(self, corner_radius = 8, text = 'Random', text_font = self.accent_font_2)
+        self.random_btn = customtkinter.CTkButton(self, corner_radius = 8, text = 'Random', text_font = self.accent_font_2, command = lambda:self.timer())
         self.random_btn.place(x = 360, y = 80)
         self.reset_btn = customtkinter.CTkButton(self, corner_radius = 8, text = 'Reset', text_font = self.accent_font_2)
         self.reset_btn.place(x = 360, y = 440)
@@ -166,6 +168,14 @@ class App(customtkinter.CTk):
             )
             self.hover(i, self.accent_color8, self.accent_color2)
         self.show_dots()
+    
+    
+    def timer(self):
+        i = 1
+        for i in range(0, 60):
+            print(f"00:0{i}")
+            i += 1
+            sleep(1)
     
     
     def show_dots(self):
