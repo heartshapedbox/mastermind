@@ -1,6 +1,7 @@
 from tkinter import *
 from threading import Timer
 from time import sleep
+import time
 import customtkinter
 import random
 import pyglet
@@ -44,6 +45,9 @@ class App(customtkinter.CTk):
         self.unguessed_colors = 0
         self.guessed_colors = 0
         self.guessed_colors_and_positions = 0
+        
+        self.sec_count = 1
+        self.min_count = 0
         
         self.show_game()
         
@@ -139,7 +143,7 @@ class App(customtkinter.CTk):
             )
             self.hover(i, self.accent_color8, self.accent_color2)
         
-        self.random_btn = customtkinter.CTkButton(self, corner_radius = 8, text = 'Random', text_font = self.accent_font_2, command = lambda:self.timer())
+        self.random_btn = customtkinter.CTkButton(self, corner_radius = 8, text = 'Random', text_font = self.accent_font_2, command = lambda:self.go())
         self.random_btn.place(x = 360, y = 80)
         self.reset_btn = customtkinter.CTkButton(self, corner_radius = 8, text = 'Reset', text_font = self.accent_font_2)
         self.reset_btn.place(x = 360, y = 440)
@@ -171,19 +175,44 @@ class App(customtkinter.CTk):
     
     
     def timer(self):
-        i = 1
-        for i in range(0, 60):
-            print(f"00:0{i}")
-            i += 1
-            sleep(1)
+        self.after(1000, self.timer)
+        if self.min_count < 10 and self.sec_count < 10:
+            self.timer_widget.configure(text = f'0{self.min_count}:0{self.sec_count}')
+
+        elif self.min_count < 10 and self.sec_count >= 10 and self.sec_count != 60:
+            self.timer_widget.configure(text = f'0{self.min_count}:{self.sec_count}')
+            
+        elif self.min_count < 10 and self.sec_count >= 10 and self.sec_count == 60:
+            self.min_count += 1
+            self.timer_widget.configure(text = f'0{self.min_count}:00')
+            self.sec_count = 0
+            
+        elif self.min_count >= 10 and self.min_count < 60 and self.sec_count >= 10 and self.sec_count == 60:
+            self.min_count += 1
+            self.timer_widget.configure(text = f'{self.min_count}:00')
+            self.sec_count = 0
+        
+        elif self.min_count >= 10 and self.min_count < 60 and self.sec_count < 10:
+            self.timer_widget.configure(text = f'{self.min_count}:0{self.sec_count}')
+            
+        elif self.min_count >= 10 and self.min_count < 60 and self.sec_count >= 10 and self.sec_count != 60:
+            self.timer_widget.configure(text = f'{self.min_count}:{self.sec_count}')
+            
+        elif self.min_count == 60:
+            self.timer_widget.configure(text = 'Time is\nOver')
+            return
+        self.sec_count += 1
     
     
     def show_dots(self):
         pass
-       
-       
-       
+    
+    
+    def go(self):
+        self.show_dots()
+        self.timer() 
         
+    
     def show_colors(self):
         self.colors_list = ['gold','lime','blue','magenta']
         print(self.colors_list)
