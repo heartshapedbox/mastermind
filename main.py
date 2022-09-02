@@ -1,18 +1,18 @@
-from multiprocessing.resource_sharer import stop
-from multiprocessing.sharedctypes import Value
-from tkinter import *
-from threading import Timer
-from time import sleep
 import time
 import tkinter
 import customtkinter
 import random
 import pyglet
 import os
+from tkinter import *
+from threading import Timer
+from time import sleep
+
 os.chdir('C:\\Users\\baben\\Documents\\GitHub\\mastermind')
 customtkinter.set_appearance_mode('light')
 customtkinter.set_default_color_theme('blue')
 pyglet.font.add_file('fonts\\Pacifico.ttf')
+
 
 class App(customtkinter.CTk):
     def __init__(self):
