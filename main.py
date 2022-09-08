@@ -1,4 +1,3 @@
-from sre_parse import State
 import time
 import tkinter
 import customtkinter
