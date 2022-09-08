@@ -1,3 +1,4 @@
+from sre_parse import State
 import time
 import tkinter
 import customtkinter
@@ -43,17 +44,34 @@ class App(customtkinter.CTk):
         self.accent_font_4 = ('Pacifico',20)
         self.accent_font_5 = ('TkMenuFont',24)
         
+        self.color_1 = PhotoImage(file = 'assets\\color_1.png').subsample(10)
+        self.color_2 = PhotoImage(file = 'assets\\color_2.png').subsample(10)
+        self.color_3 = PhotoImage(file = 'assets\\color_3.png').subsample(10)
+        self.color_4 = PhotoImage(file = 'assets\\color_4.png').subsample(10)
+        self.color_5 = PhotoImage(file = 'assets\\color_5.png').subsample(10)
+        
         self.random_colors_list = []
         self.input_colors_list = []
         self.unguessed_colors = 0
         self.guessed_colors = 0
         self.guessed_colors_and_positions = 0
+        self.try_count = 0
         self.show_base()
         
     
     def hover(self, btn, colorfgOnHover, colorfgOnLeave):
         btn.bind("<Enter>", func = lambda i: btn.configure(text_color = colorfgOnHover))
         btn.bind("<Leave>", func = lambda i: btn.configure(text_color = colorfgOnLeave))
+        
+        
+    def reset(self):
+        self.reset_btn_pressed = True
+        self.try_count = 0
+        self.show_base()
+    
+    
+    def stats(self):
+        pass
        
         
     def show_base(self):
@@ -119,24 +137,25 @@ class App(customtkinter.CTk):
             height = 470
         )
         
-        self.base_color_1_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '')
+        self.base_color_1_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '', command = lambda:self.guess_color('gold', self.color_1))
         self.base_color_1_btn.place(x = 360, y = 140)
-        self.base_color_1_btn.configure(fg_color = self.basic_color1, hover_color = self.basic_color1)
-        self.base_color_2_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '')
+        self.base_color_1_btn.configure(fg_color = self.basic_color1, hover_color = self.basic_color1, state = tkinter.DISABLED)
+        self.base_color_2_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '', command = lambda:self.guess_color('lime', self.color_2))
         self.base_color_2_btn.place(x = 360, y = 200)
-        self.base_color_2_btn.configure(fg_color = self.basic_color2, hover_color = self.basic_color2)
-        self.base_color_3_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '')
+        self.base_color_2_btn.configure(fg_color = self.basic_color2, hover_color = self.basic_color2, state = tkinter.DISABLED)
+        self.base_color_3_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '', command = lambda:self.guess_color('blue', self.color_3))
         self.base_color_3_btn.place(x = 360, y = 260)
-        self.base_color_3_btn.configure(fg_color = self.basic_color3, hover_color = self.basic_color3)
-        self.base_color_4_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '')
+        self.base_color_3_btn.configure(fg_color = self.basic_color3, hover_color = self.basic_color3, state = tkinter.DISABLED)
+        self.base_color_4_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '', command = lambda:self.guess_color('red', self.color_4))
         self.base_color_4_btn.place(x = 360, y = 320)
-        self.base_color_4_btn.configure(fg_color = self.basic_color4, hover_color = self.basic_color4)
-        self.base_color_5_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '')
+        self.base_color_4_btn.configure(fg_color = self.basic_color4, hover_color = self.basic_color4, state = tkinter.DISABLED)
+        self.base_color_5_btn = customtkinter.CTkButton(self, corner_radius = 8, text = '', command = lambda:self.guess_color('magenta', self.color_5))
         self.base_color_5_btn.place(x = 360, y = 380)
-        self.base_color_5_btn.configure(fg_color = self.basic_color5, hover_color = self.basic_color5)
+        self.base_color_5_btn.configure(fg_color = self.basic_color5, hover_color = self.basic_color5, state = tkinter.DISABLED)
         for i in (self.base_color_1_btn,self.base_color_2_btn,self.base_color_3_btn,self.base_color_4_btn,self.base_color_5_btn):
             i.configure(
                 bg_color = self.accent_color2,
+                hover_color = self.accent_color5,
                 width = 80,
                 height = 50
             )
@@ -261,6 +280,39 @@ class App(customtkinter.CTk):
         self.dots_9_widget.place(x = 23, y = 515, width = 55, height = 40)
         self.dots_10_widget = customtkinter.CTkLabel(self, image = self.dots_0, fg_color = self.accent_color6, bg_color = self.accent_color6)
         self.dots_10_widget.place(x = 23, y = 555, width = 55, height = 40)
+        
+    
+    def show_hidden_colors(self):
+        self.hidden_color = PhotoImage(file = 'assets\\color_hidden.png').subsample(10)
+        self.hidden_color_widget = customtkinter.CTkLabel(self, image = self.hidden_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.hidden_color_widget.place(x = 110, y = 88, width = 35, height = 35)
+        self.hidden_color_widget = customtkinter.CTkLabel(self, image = self.hidden_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.hidden_color_widget.place(x = 158, y = 88, width = 35, height = 35)
+        self.hidden_color_widget = customtkinter.CTkLabel(self, image = self.hidden_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.hidden_color_widget.place(x = 207, y = 88, width = 35, height = 35)
+        self.hidden_color_widget = customtkinter.CTkLabel(self, image = self.hidden_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.hidden_color_widget.place(x = 255, y = 88, width = 35, height = 35)
+        self.hidden_color_widget = customtkinter.CTkLabel(self, image = self.hidden_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.hidden_color_widget.place(x = 305, y = 88, width = 35, height = 35)
+    
+    
+    def show_empty_colors(self):
+        self.try_color = PhotoImage(file = 'assets\\color_0.png').subsample(10)
+        self.try_color_widget1_name = ''
+        self.try_color_widget1 = customtkinter.CTkLabel(self, image = self.try_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.try_color_widget1.place(x = 110, y = 155, width = 35, height = 35)
+        self.try_color_widget2_name = ''
+        self.try_color_widget2 = customtkinter.CTkLabel(self, image = self.try_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.try_color_widget2.place(x = 158, y = 155, width = 35, height = 35)
+        self.try_color_widget3_name = ''
+        self.try_color_widget3 = customtkinter.CTkLabel(self, image = self.try_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.try_color_widget3.place(x = 207, y = 155, width = 35, height = 35)
+        self.try_color_widget4_name = ''
+        self.try_color_widget4 = customtkinter.CTkLabel(self, image = self.try_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.try_color_widget4.place(x = 255, y = 155, width = 35, height = 35)
+        self.try_color_widget5_name = ''
+        self.try_color_widget5 = customtkinter.CTkLabel(self, image = self.try_color, fg_color = self.accent_color6, bg_color = self.accent_color6)
+        self.try_color_widget5.place(x = 305, y = 155, width = 35, height = 35)
     
     
     def play(self):
@@ -268,43 +320,97 @@ class App(customtkinter.CTk):
         self.sec_count = 1
         self.min_count = 0
         self.reset_btn.configure(state = tkinter.NORMAL)
+        self.base_color_1_btn.configure(state = tkinter.NORMAL)
+        self.base_color_2_btn.configure(state = tkinter.NORMAL)
+        self.base_color_3_btn.configure(state = tkinter.NORMAL)
+        self.base_color_4_btn.configure(state = tkinter.NORMAL)
+        self.base_color_5_btn.configure(state = tkinter.NORMAL)
+        
         for i in (self.random_btn,self.stats_btn,self.quit_btn,self.rules_btn):
             i.configure(state = tkinter.DISABLED)
         self.timer()
-        
-        
-        
-        
-    def reset(self):
-        self.reset_btn_pressed = True
-        self.show_base()
+        self.show_hidden_colors()
+        self.show_empty_colors() 
     
     
-    def stats(self):
-        pass
+    def guess_color(self, i, y):
+        if i in ('gold','lime','blue','red','magenta') and y in (self.color_1, self.color_2, self.color_3, self.color_4, self.color_5) and self.try_color_widget1_name == '':
+            self.try_color_widget1.configure(image = y)
+            self.try_color_widget1_name = i
+        elif i in ('gold','lime','blue','red','magenta') and y in (self.color_1, self.color_2, self.color_3, self.color_4, self.color_5) and self.try_color_widget1_name != '' and self.try_color_widget2_name == '':
+            self.try_color_widget2.configure(image = y)
+            self.try_color_widget2_name = i
+        elif i in ('gold','lime','blue','red','magenta') and y in (self.color_1, self.color_2, self.color_3, self.color_4, self.color_5) and self.try_color_widget1_name != '' and self.try_color_widget2_name != '' and self.try_color_widget3_name == '':
+            self.try_color_widget3.configure(image = y)
+            self.try_color_widget3_name = i
+        elif i in ('gold','lime','blue','red','magenta') and y in (self.color_1, self.color_2, self.color_3, self.color_4, self.color_5) and self.try_color_widget1_name != '' and self.try_color_widget2_name != '' and self.try_color_widget3_name != '' and self.try_color_widget4_name == '':
+            self.try_color_widget4.configure(image = y)
+            self.try_color_widget4_name = i
+        elif i in ('gold','lime','blue','red','magenta') and y in (self.color_1, self.color_2, self.color_3, self.color_4, self.color_5) and self.try_color_widget1_name != '' and self.try_color_widget2_name != '' and self.try_color_widget3_name != '' and self.try_color_widget4_name != '' and self.try_color_widget5_name == '':
+            self.try_color_widget5.configure(image = y)
+            self.try_color_widget5_name = i
+            
+        if self.try_color_widget5_name != '':
+            self.try_count += 1
+            self.checking()
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        if self.try_count == 11:
+            for i in (self.try_color_widget1, self.try_color_widget2, self.try_color_widget3, self.try_color_widget4, self.try_color_widget5):
+                i.destroy()
+            self.reset()
+             
+            
+    def checking(self):
+        self.step = 40
+        if self.try_count == 1:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 155
+        elif self.try_count == 2:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 195
+        elif self.try_count == 3:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 235
+        elif self.try_count == 4:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 275
+        elif self.try_count == 5:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 315
+        elif self.try_count == 6:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 355
+        elif self.try_count == 7:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 395
+        elif self.try_count == 8:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 435
+        elif self.try_count == 9:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 475
+        elif self.try_count == 10:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 515
+        elif self.try_count == 11:
+            self.dots_0_widget.configure(image = self.dots_7)
+            self.const = 555
+        self.show_empty_colors()
+        for i in (self.try_color_widget1, self.try_color_widget2, self.try_color_widget3, self.try_color_widget4, self.try_color_widget5):
+            i.place(y = self.const + self.step)
     
-    def show_colors(self):
-        self.colors_list = ['gold','lime','blue','magenta']
-        print(self.colors_list)
+    
+    
+    
+    
+
+        
+        
+        
+        
+        
+        
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 
     def get_random_colors_list(self):
@@ -325,7 +431,7 @@ class App(customtkinter.CTk):
                 else:
                     self.input_colors_list.append(self.input_color)
                     taken = True
-        print(self.input_colors_list)           
+        print(self.input_colors_list)
 
 
     def get_unguessed_colors(self):
@@ -353,7 +459,6 @@ class App(customtkinter.CTk):
         
     def main(self):
         self.count = 1
-        self.show_colors()
         self.get_random_colors_list()
         
         while self.guessed_colors_and_positions != 4:
