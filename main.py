@@ -1,4 +1,3 @@
-from operator import xor
 import time
 import tkinter
 import customtkinter
