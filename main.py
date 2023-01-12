@@ -5,6 +5,7 @@ class Mastermind():
     def __init__(self):
         self.colors_list = ["YELLOW","BLUE","RED","ORANGE"]
         self.user_all_inputs_list = []
+        self.visual_tries_count = 1
         
         
     def show_header(self):
@@ -16,12 +17,14 @@ class Mastermind():
         
     
     def show_input_colors(self):
+        log_tries_count = 1
         underscore = ""
         for i in range(1, 20):
             underscore += "_"
-        print(f"{underscore}YOUR COLORS{underscore}\n")
+        print(f"{underscore}YOUR TRIES{underscore}\n")
         for i in self.user_all_inputs_list:
-            print(f"{(' * ').join(str(y) for y in i)}")
+            print(f"TRY {log_tries_count}: {(' * ').join(str(y) for y in i)}")
+            log_tries_count += 1
     
     
     def get_random_colors_list(self):
@@ -33,15 +36,17 @@ class Mastermind():
 
     def get_user_inputs(self):
         print("\n")
-        inputs_count = 0
+        inputs_colors_count = 0
         self.input_list = []
-        while inputs_count < len(self.colors_list):
-            user_input = input(f"Choose a color {inputs_count + 1}: ").upper()
+        print(f"TRY: {self.visual_tries_count}")
+        while inputs_colors_count < len(self.colors_list):
+            user_input = input(f"Choose a color {inputs_colors_count + 1}: ").upper()
             if user_input not in self.colors_list:
                 print("COLOR IS NOT IN THE LIST! TRY AGAIN!")
             else:
                 self.input_list.append(user_input)
-                inputs_count += 1
+                inputs_colors_count += 1
+        self.visual_tries_count += 1
         return self.input_list
     
     
@@ -65,13 +70,12 @@ class Mastermind():
         tries_count = 1
         condition = False
         while condition == False and tries_count <= 10:
-            print(f"TRY: {tries_count}")
             self.show_input_colors()
             self.get_user_inputs()
             self.get_user_all_inputs()
             self.get_check_list()
             if "FALSE" in self.check_list:
-                print("\nWRONG COLORS LIST! TRY AGAIN!")
+                print("\nWRONG COLORS LIST! TRY AGAIN!\n")
                 condition = False
             else:
                 print("\nCORRECT! YOU WON!") 
