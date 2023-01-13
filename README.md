@@ -1,3 +1,5 @@
 # mastermind
  
-In progress..
+Master Mind (.py)
+
+Stack: Python.
