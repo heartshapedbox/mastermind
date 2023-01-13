@@ -4,15 +4,16 @@ import random
 class Mastermind():
     def __init__(self):
         self.colors_list = ["YELLOW","BLUE","RED","ORANGE"]
-        self.user_all_inputs_list = []
+        self.user_inputs_log = []
         self.tries_count = 1
+        self.color_and_position_match, self.color_match_but_position_wrong, self.no_such_color  = 0, 0, 0
         
         
     def show_header(self):
         underscore = ""
         for i in range(1, 20):
             underscore += "_"
-        print(f"{underscore}MASTER MIND{underscore}\nYOU HAVE 10 TRIES TO GUESS RANDOM COLORS LIST.")
+        print(f"{underscore}MASTER MIND{underscore}\nPLAYER TRIES TO GUESS A RANDOM PATTERN, IN BOTH\nCOLOR AND COLOR ORDER, WITHIN 10 TRIES.\n")
         print(f"{underscore}COLORS LIST{underscore}\n {' * '.join(str(i) for i in self.colors_list)}\n")    
         
     
@@ -22,7 +23,7 @@ class Mastermind():
         for i in range(1, 20):
             underscore += "_"
         print(f"{underscore}YOUR TRIES{underscore}\n")
-        for i in self.user_all_inputs_list:
+        for i in self.user_inputs_log:
             print(f"TRY {tries_count_log}: {(' * ').join(str(y) for y in i)}")
             tries_count_log += 1
     
@@ -50,9 +51,9 @@ class Mastermind():
         return self.input_list
     
     
-    def get_user_all_inputs(self):
-        self.user_all_inputs_list.append(self.input_list)
-        return self.user_all_inputs_list
+    def get_user_inputs_log(self):
+        self.user_inputs_log.append(self.input_list)
+        return self.user_inputs_log
         
         
     def get_check_list(self):
@@ -63,7 +64,18 @@ class Mastermind():
             else:
                 self.check_list.append("FALSE")
         return self.check_list
-        
+    
+    
+    def matching(self):
+        self.color_and_position_match, self.color_match_but_position_wrong, self.no_such_color  = 0, 0, 0
+        for i in range(0, len(self.input_list)):
+            if self.input_list[i] == self.random_colors_list[i]:
+                self.color_and_position_match += 1
+            elif self.input_list[i] != self.random_colors_list[i] and self.input_list[i] in self.random_colors_list:
+                self.color_match_but_position_wrong += 1
+            else:
+                self.no_such_color += 1
+    
 
     def tries(self):
         self.input_list, self.check_list = [], []
@@ -72,16 +84,17 @@ class Mastermind():
         while victory == False and tries_count <= 10:
             self.show_input_colors()
             self.get_user_inputs()
-            self.get_user_all_inputs()
+            self.get_user_inputs_log()
             self.get_check_list()
+            self.matching()
             if "FALSE" in self.check_list and tries_count < 10:
-                print("\nWRONG! TRY AGAIN!\n")
+                print(f"\nWRONG!\nMATCHED COLOR AND POSITION: {self.color_and_position_match}\nMATCHED COLOR BUT WRONG POSITION: {self.color_match_but_position_wrong}\nNO SUCH A COLOR: {self.no_such_color}\nTRY AGAIN!\n")
                 victory = False
             elif "FALSE" in self.check_list and tries_count == 10:
-                print("\nWRONG! GAME OVER!\n")
+                print(f"\nWRONG! GAME OVER! RANDOM COLORS:\n{' * '.join(str(i) for i in self.random_colors_list)}\n")
                 victory = False
             else:
-                print("\nCORRECT! YOU WON!") 
+                print(f"\nCONGRATULATION! YOU WON! RANDOM COLORS:\n{' * '.join(str(i) for i in self.random_colors_list)}\n") 
                 victory = True
             tries_count += 1
         
