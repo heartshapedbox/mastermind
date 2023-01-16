@@ -7,22 +7,22 @@ class Mastermind():
         self.user_inputs_log = []
         self.tries_count = 1
         self.color_and_position_match, self.color_match_but_position_wrong, self.no_such_color  = 0, 0, 0
-        
-        
+    
+
     def show_header(self):
         underscore = ""
         for i in range(1, 20):
             underscore += "_"
         print(f"{underscore}MASTER MIND{underscore}\nPLAYER TRIES TO GUESS A RANDOM PATTERN, IN BOTH\nCOLOR AND COLOR ORDER, WITHIN 10 TRIES.\n")
-        print(f"{underscore}COLORS LIST{underscore}\n {' * '.join(str(i) for i in self.colors_list)}\n")    
-        
+        print(f"{underscore}COLORS LIST{underscore}\n {' * '.join(str(i) for i in self.colors_list)}\n")
+    
     
     def show_input_colors(self):
         tries_count_log = 1
         underscore = ""
         for i in range(1, 20):
             underscore += "_"
-        print(f"{underscore}YOUR TRIES{underscore}\n")
+        print(f"\n{underscore}YOUR TRIES{underscore}\n")
         for i in self.user_inputs_log:
             print(f"TRY {tries_count_log}: {(' * ').join(str(y) for y in i)}")
             tries_count_log += 1
@@ -33,8 +33,8 @@ class Mastermind():
         for i in range(0, len(self.colors_list)):
             self.random_colors_list.append(random.choice(self.colors_list))
         return self.random_colors_list
-
-
+    
+    
     def get_user_inputs(self):
         print("\n")
         input_colors_count = 0
@@ -54,8 +54,8 @@ class Mastermind():
     def get_user_inputs_log(self):
         self.user_inputs_log.append(self.input_list)
         return self.user_inputs_log
-        
-        
+    
+     
     def get_check_list(self):
         self.check_list = []
         for i in range(0, len(self.random_colors_list)):
@@ -76,7 +76,7 @@ class Mastermind():
             else:
                 self.no_such_color += 1
     
-
+    
     def tries(self):
         self.input_list, self.check_list = [], []
         tries_count = 1
@@ -93,18 +93,28 @@ class Mastermind():
             elif "FALSE" in self.check_list and tries_count == 10:
                 print(f"\nWRONG! GAME OVER! RANDOM COLORS:\n{' * '.join(str(i) for i in self.random_colors_list)}\n")
                 victory = False
+                self.user_inputs_log = []
+                self.tries_count = 1
             else:
                 print(f"\nCONGRATULATION! YOU WON! RANDOM COLORS:\n{' * '.join(str(i) for i in self.random_colors_list)}\n") 
                 victory = True
+                self.user_inputs_log = []
+                self.tries_count = 1
             tries_count += 1
-        
-
+    
+    
     def play(self):
         self.show_header()
-        self.get_random_colors_list()
-        self.tries()
+        playing = True
+        while playing == True:
+            player_answer = input("WOULD YOU LIKE TO PLAY? (Y/N): ").upper()
+            if player_answer == "Y":
+                self.get_random_colors_list()
+                self.tries()
+            else:
+                print("GAME IS OVER!")
+                break
 
 
 if __name__ == "__main__":
     Mastermind().play()
-    
